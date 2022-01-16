@@ -91,3 +91,7 @@ function string_reverse(str) {
 	}
 	return newstr;
 }
+
+function struct_copy(struct) {
+	return json_parse(json_stringify(struct));
+}

@@ -97,6 +97,10 @@ function handle_dispatch(packet) {
 		case "MESSAGE_CREATE":
 			on_message_create(packet.d)
 		break;
+		case "INTERACTION_CREATE":
+			on_interaction_create(packet.d);
+			
+		break;
 		
 	}
 }
@@ -158,4 +162,22 @@ function on_message_create(msg) {
 			}
 		}
 	}
+}
+
+function on_interaction_create(cmd) {
+	var txt = json_stringify(cmd);
+	//show_message_async(txt);
+	show_debug_message(txt);
+	var interaction = new DiscordInteraction(cmd,id)
+	for (var i=0;i<array_length(handlers.INTERACTION_CREATE);i++) {
+		var fn = handlers.INTERACTION_CREATE[i];
+		if (!is_null(fn)) {
+			fn.cb(interaction);
+			if (fn.type == "once") {
+				handlers.INTERACTION_CREATE[i] = undefined;	
+			}
+		}
+	}
+	
+
 }
